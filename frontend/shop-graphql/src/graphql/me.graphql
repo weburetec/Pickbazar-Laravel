@@ -1,0 +1,32 @@
+query me {
+  me {
+    id
+    name
+    email
+    profile {
+      id
+      bio
+      socials {
+        type
+        link
+      }
+      avatar {
+        id
+        thumbnail
+      }
+      contact
+    }
+    address {
+      id
+      title
+      default
+      address {
+        country
+        city
+        state
+        zip
+        street_address
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_REST_API_ENDPOINT": "https://pickbazarapi.redq.io/"
+    }
+  }
+}

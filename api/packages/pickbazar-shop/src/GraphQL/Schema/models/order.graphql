@@ -1,0 +1,111 @@
+extend type Query {
+    orders(
+        tracking_number: String @where(operator: "LIKE")
+        orderBy: String
+        sortedBy: String
+        customer_id: Int @eq
+        shop_id: Int @eq
+    ): [Order!]!
+        @paginate(
+            builder: "PickBazar\\GraphQL\\Queries\\OrderQuery@fetchOrders"
+            defaultCount: 10
+        )
+    order(id: ID @eq, tracking_number: String @eq): Order
+        @find
+        @can(ability: "customer")
+}
+
+enum PaymentGatewayType {
+    STRIPE @enum(value: "stripe")
+    CASH_ON_DELIVERY @enum(value: "cod")
+}
+
+type Order {
+    id: ID
+    tracking_number: String
+    customer_id: Int
+    customer_contact: String
+    customer: User @belongsTo
+    parent_order: Order @belongsTo
+    children: [Order] @hasMany
+    status: OrderStatus @belongsTo
+    amount: Float
+    sales_tax: Float
+    total: Float
+    paid_total: Float
+    payment_id: String
+    payment_gateway: PaymentGatewayType
+    coupon: Coupon @belongsTo
+    shop: Shop @belongsTo
+    discount: Float
+    delivery_fee: Float
+    delivery_time: String
+    products: [Product] @belongsToMany
+    created_at: DateTime
+    updated_at: DateTime
+    billing_address: UserAddress
+    shipping_address: UserAddress
+}
+
+input SyncProductOrderBelongsToMany {
+    sync: [ConnectProductOrderPivot!]
+}
+
+input ConnectOrderStatusBelongsTo {
+    connect: ID! @rules(apply: ["exists:order_status,id"])
+}
+
+input ConnectCustomerBelongsTo {
+    connect: ID! @rules(apply: ["exists:users,id"])
+}
+input ConnectCouponBelongsTo {
+    connect: ID! @rules(apply: ["exists:coupons,id"])
+}
+
+input updateOrderInput {
+    id: ID!
+    status: ID!
+    products: SyncProductOrderBelongsToMany
+    coupon: ConnectCouponBelongsTo
+    shop_id: ID @rules(apply: ["exists:shops,id"])
+    delivery_time: String
+    billing_address: UserAddressInput
+    shipping_address: UserAddressInput
+}
+
+input CardInput {
+    number: String!
+    expiryMonth: String!
+    expiryYear: String!
+    cvv: String!
+    email: String
+}
+
+input createOrderInput {
+    customer_contact: String! @rules(apply: ["required"])
+    status: String! @rules(apply: ["required"])
+    products: [ConnectProductOrderPivot!]! @rules(apply: ["required"])
+    amount: Float! @rules(apply: ["required"])
+    sales_tax: Float
+    total: Float! @rules(apply: ["required"])
+    paid_total: Float! @rules(apply: ["required"])
+    payment_id: String
+    payment_gateway: PaymentGatewayType! @rules(apply: ["required"])
+    coupon_id: Int
+    shop_id: Int
+    discount: Float
+    delivery_fee: Float
+    delivery_time: String
+    card: CardInput
+    billing_address: UserAddressInput
+    shipping_address: UserAddressInput
+}
+
+extend type Mutation {
+    deleteOrder(id: ID!): Order @delete @can(ability: "super_admin")
+    createOrder(input: createOrderInput @spread): Order
+        @field(resolver: "OrderMutator@store")
+        @can(ability: "customer")
+    updateOrder(input: updateOrderInput @spread): Order
+        @field(resolver: "OrderMutator@update")
+}

@@ -1,0 +1,15 @@
+.scrollbar_height {
+  max-height: 100vh;
+}
+
+@media screen and (min-width: 768px) {
+  .scrollbar_height {
+    max-height: calc(100vh - 160px);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .scrollbar_height {
+    max-height: calc(100vh - 115px);
+  }
+}

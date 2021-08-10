@@ -1,0 +1,41 @@
+type Shipping {
+    id: ID
+    name: String
+    amount: Float
+    is_global: Boolean
+    type: ShippingType
+}
+
+extend type Query {
+    shippingClasses(
+        text: String @where(operator: "like", key: "name")
+        orderBy: _
+            @orderBy(columns: ["created_at", "updated_at", "name", "amount"])
+    ): [Shipping!]! @all
+    shippingClass(id: ID! @eq): Shipping @find
+}
+
+input ShippingInput {
+    name: String!
+    amount: Float!
+    is_global: Boolean
+    type: ShippingType!
+}
+
+input ShippingUpdateInput {
+    id: ID!
+    name: String
+    amount: Float
+    is_global: Boolean
+    type: ShippingType
+}
+
+extend type Mutation {
+    createShipping(input: ShippingInput @spread): Shipping
+        @create
+        @can(ability: "super_admin")
+    updateShipping(input: ShippingUpdateInput @spread): Shipping
+        @update
+        @can(ability: "super_admin")
+    deleteShipping(id: ID!): Shipping @delete @can(ability: "super_admin")
+}

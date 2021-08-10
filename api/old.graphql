@@ -1,0 +1,1577 @@
+[32mtype Address {
+  id: ID
+  title: String
+  default: Boolean
+  address: UserAddress
+  type: AddressType
+  customer: User
+}
+
+input AddressHasMany {
+  upsert: [UserAddressUpsertInput]
+}
+
+input AddressInput {
+  title: String!
+  default: Boolean
+  address: UserAddressInput!
+  type: AddressType!
+  customer: ConnectBelongsTo
+}
+
+enum AddressType {
+  BILLING
+  SHIPPING
+}
+
+type Analytics {
+  totalRevenue: Float
+  todaysRevenue: Float
+  totalOrders: Int
+  newCustomers: Int
+  totalYearSaleByMonth: [totalYearSaleByMonth]
+}
+
+type Attachment {
+  thumbnail: String
+  original: String
+  id: ID
+}
+
+input AttachmentInput {
+  thumbnail: String
+  original: String
+  id: ID
+}
+
+type Attribute {
+  id: ID
+  name: String
+  slug: String
+  values: [AttributeValue]
+}
+
+input AttributeBelongTo {
+  connect: ID!
+}
+
+input AttributeInput {
+  name: String!
+}
+
+input AttributeProductPivot {
+  id: ID!
+  price: Float
+}
+
+type AttributeValue {
+  id: ID
+  value: String
+  meta: String
+  attribute: Attribute
+  products: [Product]
+  pivot: VariationProductPivot
+}
+
+input AttributeValueCreateInput {
+  value: String!
+  meta: String
+  attribute: AttributeBelongTo
+}
+
+input AttributeValueUpdateInput {
+  id: ID!
+  value: String
+  meta: String
+  attribute: AttributeBelongTo
+}
+
+type AuthResponse {
+  token: String
+  permissions: [String]
+}
+
+input CardInput {
+  number: String!
+  expiryMonth: String!
+  expiryYear: String!
+  cvv: String!
+  email: String
+}
+
+"""
+Allowed column names for the `hasType` argument on the query `categoriesAlongChildren`.
+"""
+enum CategoriesAlongChildrenHasTypeColumn {
+  SLUG
+}
+
+"""
+Dynamic WHERE conditions for the `hasType` argument on the query `categoriesAlongChildren`.
+"""
+input CategoriesAlongChildrenHasTypeWhereConditions {
+  """The column that is used for the condition."""
+  column: CategoriesAlongChildrenHasTypeColumn
+
+  """The operator that is used for the condition."""
+  operator: SQLOperator = EQ
+
+  """The value that is used for the condition."""
+  value: Mixed
+
+  """A set of conditions that requires all conditions to match."""
+  AND: [CategoriesAlongChildrenHasTypeWhereConditions!]
+
+  """A set of conditions that requires at least one condition to match."""
+  OR: [CategoriesAlongChildrenHasTypeWhereConditions!]
+}
+
+"""
+Allowed column names for the `orderBy` argument on the query `categoriesAlongChildren`.
+"""
+enum CategoriesAlongChildrenOrderByColumn {
+  CREATED_AT
+  NAME
+  UPDATED_AT
+}
+
+"""
+Order by clause for the `orderBy` argument on the query `categoriesAlongChildren`.
+"""
+input CategoriesAlongChildrenOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: CategoriesAlongChildrenOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+"""
+Allowed column names for the `hasType` argument on the query `categories`.
+"""
+enum CategoriesHasTypeColumn {
+  SLUG
+}
+
+"""
+Dynamic WHERE conditions for the `hasType` argument on the query `categories`.
+"""
+input CategoriesHasTypeWhereConditions {
+  """The column that is used for the condition."""
+  column: CategoriesHasTypeColumn
+
+  """The operator that is used for the condition."""
+  operator: SQLOperator = EQ
+
+  """The value that is used for the condition."""
+  value: Mixed
+
+  """A set of conditions that requires all conditions to match."""
+  AND: [CategoriesHasTypeWhereConditions!]
+
+  """A set of conditions that requires at least one condition to match."""
+  OR: [CategoriesHasTypeWhereConditions!]
+}
+
+"""
+Allowed column names for the `orderBy` argument on the query `categories`.
+"""
+enum CategoriesOrderByColumn {
+  CREATED_AT
+  NAME
+  UPDATED_AT
+}
+
+"""Order by clause for the `orderBy` argument on the query `categories`."""
+input CategoriesOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: CategoriesOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+type Category {
+  id: ID
+  name: String
+  slug: String
+  parent: Category
+  children: [Category]
+  details: String
+  image: Attachment
+  icon: String
+  type: Type
+  products: [Product]
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+"""A paginated list of Category items."""
+type CategoryPaginator {
+  """Pagination information about the list of items."""
+  paginatorInfo: PaginatorInfo!
+
+  """A list of Category items."""
+  data: [Category!]!
+}
+
+input CheckoutVerificationInput {
+  amount: Float!
+  products: [ConnectProductOrderPivot!]!
+  billing_address: UserAddressInput
+  shipping_address: UserAddressInput
+}
+
+input ConnectBelongsTo {
+  connect: ID
+}
+
+input ConnectCouponBelongsTo {
+  connect: ID!
+}
+
+input ConnectCustomerBelongsTo {
+  connect: ID!
+}
+
+input ConnectOrderStatusBelongsTo {
+  connect: ID!
+}
+
+input ConnectProductOrderPivot {
+  product_id: ID!
+  variation_option_id: ID
+  order_quantity: Int
+  unit_price: Float
+  subtotal: Float
+}
+
+input ConnectTypeBelongsTo {
+  connect: ID!
+}
+
+input ContactInput {
+  subject: String!
+  email: String!
+  name: String!
+  description: String!
+}
+
+type ContactResponse {
+  message: String
+  success: Boolean
+}
+
+type Coupon {
+  id: ID
+  code: String
+  description: String
+  orders: [Order]
+  type: CouponType
+  image: Attachment
+  is_valid: Boolean
+  amount: Float
+  active_from: String
+  expire_at: String
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+input CouponInput {
+  code: String!
+  type: CouponType!
+  amount: Float!
+  description: String
+  image: AttachmentInput
+  active_from: String!
+  expire_at: String!
+}
+
+"""A paginated list of Coupon items."""
+type CouponPaginator {
+  """Pagination information about the list of items."""
+  paginatorInfo: PaginatorInfo!
+
+  """A list of Coupon items."""
+  data: [Coupon!]!
+}
+
+enum CouponType {
+  """Fixed coupon"""
+  FIXED_COUPON
+
+  """Percentage coupon"""
+  PERCENTAGE_COUPON
+
+  """Free shipping coupon"""
+  FREE_SHIPPING_COUPON
+
+  """Fixed coupon"""
+  FIXED_COUPON
+}
+
+input CouponUpdateInput {
+  code: String!
+  type: CouponType!
+  amount: Float!
+  description: String
+  image: AttachmentInput
+  active_from: String!
+  expire_at: String!
+}
+
+"""
+Allowed column names for the `orderBy` argument on the query `coupons`.
+"""
+enum CouponsOrderByColumn {
+  CREATED_AT
+  UPDATED_AT
+}
+
+"""Order by clause for the `orderBy` argument on the query `coupons`."""
+input CouponsOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: CouponsOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+input CreateProductInput {
+  name: String!
+  type_id: String!
+  vendor_id: ID!
+  price: Float
+  max_price: Float
+  min_price: Float
+  sale_price: Float
+  quantity: Int
+  product_type: ProductType
+  unit: String!
+  description: String
+  categories: SyncCategoryBelongsToMany
+  variations: SyncAttributeBelongsToMany
+  variation_options: UpsertVariationsHasMany
+  in_stock: Boolean
+  is_taxable: Boolean
+  sku: String
+  gallery: [AttachmentInput]
+  image: AttachmentInput
+  status: ProductStatus
+  height: String
+  length: String
+  width: String
+}
+
+input CreateTypeInput {
+  name: String!
+  image: AttachmentInput
+  icon: String
+}
+
+"""A date string with format `Y-m-d`, e.g. `2011-05-23`."""
+scalar Date
+
+"""
+A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`.
+"""
+scalar DateTime
+
+"""
+A datetime and timezone string in ISO 8601 format `Y-m-dTH:i:sO`, e.g. `2020-04-20T13:53:12+02:00`.
+"""
+scalar DateTimeTz
+
+type FacebookSettings {
+  isEnable: Boolean
+  appId: String
+  pageId: String
+}
+
+input FacebookSettingsInput {
+  isEnable: Boolean
+  appId: String
+  pageId: String
+}
+
+type GoogleSettings {
+  isEnable: Boolean
+  tagManagerId: String
+}
+
+input GoogleSettingsInput {
+  isEnable: Boolean
+  tagManagerId: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+"""
+Loose type that allows any value. Be careful when passing in large `Int` or `Float` literals,
+as they may not be parsed correctly on the server side. Use `String` literals if you are
+dealing with really large numbers to be on the safe side.
+"""
+scalar Mixed
+
+type Mutation {
+  upload(attachment: [Upload]): [Attachment]
+  createAddress(input: AddressInput): Address
+  updateAddress(id: ID!, input: AddressInput): Address
+  deleteAddress(id: ID!): Address
+  createAttribute(input: AttributeInput): Attribute
+  updateAttribute(id: ID!, input: AttributeInput): Attribute
+  deleteAttribute(id: ID!): Attribute
+  createAttributeValue(input: AttributeValueCreateInput): AttributeValue
+  updateAttributeValue(input: AttributeValueUpdateInput): AttributeValue
+  deleteAttributeValue(id: ID!): AttributeValue
+  deleteCategory(id: ID!): Category
+  createCategory(input: createCategoryInput): Category
+  updateCategory(input: updateCategoryInput): Category
+  verifyCheckout(input: CheckoutVerificationInput): VerifiedCheckoutData
+  contact(input: ContactInput): ContactResponse
+  createCoupon(input: CouponInput): Coupon
+  updateCoupon(id: ID!, input: CouponUpdateInput): Coupon
+  deleteCoupon(id: ID!): Coupon
+  verifyCoupon(code: String!): VerifyCouponResponse
+  restoreCoupon(id: ID!): Coupon
+  deleteOrder(id: ID!): Order
+  updateOrder(input: updateOrderInput): Order
+  createOrder(input: createOrderInput): Order
+  createOrderStatus(input: OrderStatusInput): OrderStatus
+  updateOrderStatus(input: OrderStatusUpdateInput): OrderStatus
+  deleteOrderStatus(id: ID!): OrderStatus
+  deleteProduct(id: ID!): Product
+  createProduct(input: CreateProductInput): Product
+  updateProduct(input: UpdateProductInput): Product
+  createProfile(input: ProfileInput): Profile
+  updateProfile(id: ID!, input: ProfileInput): Profile
+  deleteProfile(id: ID!): Profile
+  updateSettings(input: SettingsInput!): Settings
+  createShipping(input: ShippingInput): Shipping
+  updateShipping(input: ShippingUpdateInput): Shipping
+  deleteShipping(id: ID!): Shipping
+  deleteTag(id: ID!): Tag
+  createTag(input: createTagInput): Tag
+  updateTag(input: updateTagInput): Tag
+  createTax(input: TaxInput): Tax
+  updateTax(input: TaxUpdateInput): Tax
+  deleteTax(id: ID!): Tax
+  deleteType(id: ID!): Type
+  updateType(id: ID!, input: CreateTypeInput): Type
+  createType(input: CreateTypeInput): Type
+  login(input: LoginInput): AuthResponse
+  logout: Boolean
+  register(input: RegisterInput): AuthResponse
+  banUser(id: ID!): User
+  activeUser(id: ID!): User
+  changePassword(input: changePasswordInput): passwordChangeResponse
+  forgetPassword(input: forgetPasswordInput): passwordChangeResponse
+  verifyForgetPasswordToken(input: verifyForgetPasswordTokenInput): passwordChangeResponse
+  resetPassword(input: resetPasswordInput): passwordChangeResponse
+  update(input: UserUpdateInput): User
+}
+
+type Order {
+  id: ID
+  tracking_number: String
+  customer_id: Int
+  customer_contact: String
+  customer: User
+  status: OrderStatus
+  amount: Float
+  sales_tax: Float
+  total: Float
+  paid_total: Float
+  payment_id: String
+  payment_gateway: PaymentGatewayType
+  coupon: Coupon
+  vendor: User
+  discount: Float
+  delivery_fee: Float
+  delivery_time: String
+  products: [Product]
+  created_at: DateTime
+  updated_at: DateTime
+  billing_address: UserAddress
+  shipping_address: UserAddress
+}
+
+"""Allows ordering a list of records."""
+input OrderByClause {
+  """The column that is used for ordering."""
+  field: String!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+"""A paginated list of Order items."""
+type OrderPaginator {
+  """Pagination information about the list of items."""
+  paginatorInfo: PaginatorInfo!
+
+  """A list of Order items."""
+  data: [Order!]!
+}
+
+type OrderProductPivot {
+  variation_option_id: ID
+  order_quantity: Int
+  unit_price: Float
+  subtotal: Float
+}
+
+type OrderStatus {
+  id: ID!
+  name: String
+  color: String
+  serial: Int
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+input OrderStatusInput {
+  name: String!
+  color: String!
+  serial: Int!
+}
+
+"""A paginated list of OrderStatus items."""
+type OrderStatusPaginator {
+  """Pagination information about the list of items."""
+  paginatorInfo: PaginatorInfo!
+
+  """A list of OrderStatus items."""
+  data: [OrderStatus!]!
+}
+
+input OrderStatusUpdateInput {
+  id: ID!
+  name: String!
+  color: String!
+  serial: Int!
+}
+
+"""
+Allowed column names for the `orderBy` argument on the query `order_statuses`.
+"""
+enum OrderStatusesOrderByColumn {
+  UPDATED_AT
+  CREATED_AT
+  SERIAL
+}
+
+"""
+Order by clause for the `orderBy` argument on the query `order_statuses`.
+"""
+input OrderStatusesOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: OrderStatusesOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+"""
+Allowed column names for the `orderBy` argument on the query `orders`.
+"""
+enum OrdersOrderByColumn {
+  CREATED_AT
+  UPDATED_AT
+}
+
+"""Order by clause for the `orderBy` argument on the query `orders`."""
+input OrdersOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: OrdersOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+"""Pagination information about the corresponding list of items."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+
+  """Total number of node in connection."""
+  total: Int
+
+  """Count of nodes in current request."""
+  count: Int
+
+  """Current page of request."""
+  currentPage: Int
+
+  """Last page in connection."""
+  lastPage: Int
+}
+
+"""Pagination information about the corresponding list of items."""
+type PaginatorInfo {
+  """Total count of available items in the page."""
+  count: Int!
+
+  """Current pagination page."""
+  currentPage: Int!
+
+  """Index of first item in the current page."""
+  firstItem: Int
+
+  """If collection has more pages."""
+  hasMorePages: Boolean!
+
+  """Index of last item in the current page."""
+  lastItem: Int
+
+  """Last page number of the collection."""
+  lastPage: Int!
+
+  """Number of items per page in the collection."""
+  perPage: Int!
+
+  """Total items available in the collection."""
+  total: Int!
+}
+
+enum PaymentGatewayType {
+  STRIPE
+  CASH_ON_DELIVERY
+}
+
+type PaymentInfo {
+  account: String
+  name: String
+  email: String
+  bank: String
+}
+
+enum Permission {
+  """Super admin"""
+  SUPER_ADMIN
+
+  """Store owner"""
+  STORE_OWNER
+
+  """Store keeper"""
+  STORE_KEEPER
+
+  """Customer"""
+  CUSTOMER
+}
+
+type Product {
+  id: ID
+  name: String
+  slug: String
+  type: Type
+  product_type: ProductType
+  categories: [Category]
+  variations: [AttributeValue]
+  variation_options: [Variation]
+  pivot: OrderProductPivot
+  orders: [Order]
+  vendor: User
+  related_products(slug: String, limit: Int): [Product]
+  description: String
+  in_stock: Boolean
+  is_taxable: Boolean
+  sale_price: Float
+  max_price: Float
+  min_price: Float
+  sku: String
+  gallery: [Attachment]
+  image: Attachment
+  status: ProductStatus
+  height: String
+  length: String
+  width: String
+  price: Float
+  quantity: Int
+  unit: String
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+"""A paginated list of Product items."""
+type ProductPaginator {
+  """Pagination information about the list of items."""
+  paginatorInfo: PaginatorInfo!
+
+  """A list of Product items."""
+  data: [Product!]!
+}
+
+enum ProductStatus {
+  PUBLISH
+  DRAFT
+}
+
+enum ProductType {
+  """Simple"""
+  SIMPLE
+
+  """Variable"""
+  VARIABLE
+}
+
+"""
+Allowed column names for the `hasCategories` argument on the query `products`.
+"""
+enum ProductsHasCategoriesColumn {
+  SLUG
+}
+
+"""
+Dynamic WHERE conditions for the `hasCategories` argument on the query `products`.
+"""
+input ProductsHasCategoriesWhereConditions {
+  """The column that is used for the condition."""
+  column: ProductsHasCategoriesColumn
+
+  """The operator that is used for the condition."""
+  operator: SQLOperator = EQ
+
+  """The value that is used for the condition."""
+  value: Mixed
+
+  """A set of conditions that requires all conditions to match."""
+  AND: [ProductsHasCategoriesWhereConditions!]
+
+  """A set of conditions that requires at least one condition to match."""
+  OR: [ProductsHasCategoriesWhereConditions!]
+}
+
+"""
+Allowed column names for the `hasType` argument on the query `products`.
+"""
+enum ProductsHasTypeColumn {
+  SLUG
+}
+
+"""
+Dynamic WHERE conditions for the `hasType` argument on the query `products`.
+"""
+input ProductsHasTypeWhereConditions {
+  """The column that is used for the condition."""
+  column: ProductsHasTypeColumn
+
+  """The operator that is used for the condition."""
+  operator: SQLOperator = EQ
+
+  """The value that is used for the condition."""
+  value: Mixed
+
+  """A set of conditions that requires all conditions to match."""
+  AND: [ProductsHasTypeWhereConditions!]
+
+  """A set of conditions that requires at least one condition to match."""
+  OR: [ProductsHasTypeWhereConditions!]
+}
+
+"""
+Allowed column names for the `orderBy` argument on the query `products`.
+"""
+enum ProductsOrderByColumn {
+  CREATED_AT
+  NAME
+  UPDATED_AT
+}
+
+"""Order by clause for the `orderBy` argument on the query `products`."""
+input ProductsOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: ProductsOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+type Profile {
+  id: ID
+  avatar: Attachment
+  bio: String
+  socials: [Social]
+  contact: String
+  customer: User
+}
+
+input ProfileHasOne {
+  upsert: UserProfileInput
+}
+
+input ProfileInput {
+  avatar: AttachmentInput
+  bio: String
+  socials: [SocialInput]
+  contact: String
+  customer: ConnectBelongsTo
+}
+
+type Query {
+  address: [Address!]!
+  singleAddress(id: ID): Address
+  analytics: Analytics
+  popular_products(limit: Int, vendor_id: Int): [Product]
+  attributes: [Attribute]
+  attribute(id: ID, slug: String): Attribute
+  attributeValues: [AttributeValue!]!
+  attributeValue(id: ID): AttributeValue
+  categories(
+    orderBy: [CategoriesOrderByOrderByClause!]
+    name: String
+    text: String
+    parent: Int = null
+    hasType: CategoriesHasTypeWhereConditions
+
+    """Limits number of fetched elements."""
+    first: Int = 15
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): CategoryPaginator
+  categoriesAlongChildren(orderBy: [CategoriesAlongChildrenOrderByOrderByClause!], hasType: CategoriesAlongChildrenHasTypeWhereConditions): [Category]
+  category(id: ID, slug: String): Category
+  coupons(
+    text: String
+    orderBy: [CouponsOrderByOrderByClause!]
+
+    """Limits number of fetched elements."""
+    first: Int!
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): CouponPaginator
+  coupon(id: ID, code: String): Coupon
+  orders(
+    tracking_number: String
+    orderBy: [OrdersOrderByOrderByClause!]
+    customer_id: Int
+    vendor_id: Int
+
+    """Limits number of fetched elements."""
+    first: Int = 10
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): OrderPaginator
+  order(id: ID, tracking_number: String): Order
+  order_statuses(
+    text: String
+    orderBy: [OrderStatusesOrderByOrderByClause!]
+
+    """Limits number of fetched elements."""
+    first: Int = 15
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): OrderStatusPaginator
+  order_status(id: ID): OrderStatus
+  products(
+    orderBy: [ProductsOrderByOrderByClause!]
+    text: String
+    status: String
+    vendor_id: Int
+    hasType: ProductsHasTypeWhereConditions
+    hasCategories: ProductsHasCategoriesWhereConditions
+
+    """Limits number of fetched elements."""
+    first: Int = 15
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): ProductPaginator
+  product(id: ID, slug: String): Product
+  profiles(contact: String): [Profile!]!
+  singleProfile(id: ID): Profile
+  settings: Settings
+  shippingClasses(text: String, orderBy: [ShippingClassesOrderByOrderByClause!]): [Shipping!]!
+  shippingClass(id: ID!): Shipping
+  tags(
+    orderBy: [TagsOrderByOrderByClause!]
+    name: String
+    text: String
+    hasType: TagsHasTypeWhereConditions
+
+    """Limits number of fetched elements."""
+    first: Int = 15
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): TagPaginator
+  tag(id: ID, slug: String): Tag
+  taxClasses(text: String, orderBy: [TaxClassesOrderByOrderByClause!]): [Tax!]!
+  taxClass(id: ID!): Tax
+  types(text: String, orderBy: [TypesOrderByOrderByClause!]): [Type!]!
+  type(id: ID, slug: String): Type
+  users(
+    text: String
+    orderBy: [UsersOrderByOrderByClause!]
+
+    """Limits number of fetched elements."""
+    first: Int = 10
+
+    """The offset from which elements are returned."""
+    page: Int
+  ): UserPaginator
+  user(id: ID): User
+  vendors: [User]
+  me: User
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+  name: String!
+  permission: String
+}
+
+"""The available SQL operators that are used to filter query results."""
+enum SQLOperator {
+  """Equal operator (`=`)"""
+  EQ
+
+  """Not equal operator (`!=`)"""
+  NEQ
+
+  """Greater than operator (`>`)"""
+  GT
+
+  """Greater than or equal operator (`>=`)"""
+  GTE
+
+  """Less than operator (`<`)"""
+  LT
+
+  """Less than or equal operator (`<=`)"""
+  LTE
+
+  """Simple pattern matching (`LIKE`)"""
+  LIKE
+
+  """Negation of simple pattern matching (`NOT LIKE`)"""
+  NOT_LIKE
+
+  """Whether a value is within a set of values (`IN`)"""
+  IN
+
+  """Whether a value is not within a set of values (`NOT IN`)"""
+  NOT_IN
+
+  """Whether a value is within a range of values (`BETWEEN`)"""
+  BETWEEN
+
+  """Whether a value is not within a range of values (`NOT BETWEEN`)"""
+  NOT_BETWEEN
+
+  """Whether a value is null (`IS NULL`)"""
+  IS_NULL
+
+  """Whether a value is not null (`IS NOT NULL`)"""
+  IS_NOT_NULL
+}
+
+type SeoSettings {
+  metaTitle: String
+  metaDescription: String
+  metaTags: String
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: Attachment
+  twitterHandle: String
+  twitterCardType: String
+}
+
+input SeoSettingsInput {
+  metaTitle: String
+  metaDescription: String
+  metaTags: String
+  canonicalUrl: String
+  ogTitle: String
+  ogDescription: String
+  ogImage: AttachmentInput
+  twitterHandle: String
+  twitterCardType: String
+}
+
+type Settings {
+  id: ID
+  options: SettingsOptions
+}
+
+input SettingsInput {
+  options: SettingsOptionsInput
+}
+
+type SettingsOptions {
+  siteTitle: String
+  siteSubtitle: String
+  currency: String
+  logo: Attachment
+  taxClass: String
+  shippingClass: String
+  seo: SeoSettings
+  google: GoogleSettings
+  facebook: FacebookSettings
+}
+
+input SettingsOptionsInput {
+  siteTitle: String
+  siteSubtitle: String
+  currency: String
+  logo: AttachmentInput
+  taxClass: String
+  shippingClass: String
+  seo: SeoSettingsInput
+  google: GoogleSettingsInput
+  facebook: FacebookSettingsInput
+}
+
+type Shipping {
+  id: ID
+  name: String
+  amount: Float
+  is_global: Boolean
+  type: ShippingType
+}
+
+"""
+Allowed column names for the `orderBy` argument on the query `shippingClasses`.
+"""
+enum ShippingClassesOrderByColumn {
+  CREATED_AT
+  UPDATED_AT
+}
+
+"""
+Order by clause for the `orderBy` argument on the query `shippingClasses`.
+"""
+input ShippingClassesOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: ShippingClassesOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+input ShippingInput {
+  name: String!
+  amount: Float!
+  is_global: Boolean
+  type: ShippingType!
+}
+
+enum ShippingType {
+  """Fixed"""
+  FIXED
+
+  """Percentage"""
+  PERCENTAGE
+
+  """Free"""
+  FREE
+
+  """Fixed"""
+  FIXED
+}
+
+input ShippingUpdateInput {
+  id: ID!
+  name: String
+  amount: Float
+  is_global: Boolean
+  type: ShippingType
+}
+
+type Shop {
+  id: ID
+  owner_id: Int
+  admin_commission_rate: Float
+  total_earnings: Float
+  withdrawn_amount: Float
+  current_balance: Float
+  name: String
+  description: String
+  cover_image: Attachment
+  logo: Attachment
+  payment_info: PaymentInfo
+  address: UserAddress
+  settings: String
+}
+
+type Social {
+  type: String
+  link: String
+}
+
+input SocialInput {
+  type: String
+  link: String
+}
+
+"""The available directions for ordering a list of records."""
+enum SortOrder {
+  """Sort records in ascending order."""
+  ASC
+
+  """Sort records in descending order."""
+  DESC
+}
+
+input SyncAttributeBelongsToMany {
+  sync: [AttributeProductPivot]
+}
+
+input SyncCategoryBelongsToMany {
+  sync: [ID!]
+}
+
+input SyncProductOrderBelongsToMany {
+  sync: [ConnectProductOrderPivot!]
+}
+
+type Tag {
+  id: ID
+  name: String
+  slug: String
+  parent: Int
+  details: String
+  image: Attachment
+  icon: String
+  type: Type
+  products: [Product]
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+"""A paginated list of Tag items."""
+type TagPaginator {
+  """Pagination information about the list of items."""
+  paginatorInfo: PaginatorInfo!
+
+  """A list of Tag items."""
+  data: [Tag!]!
+}
+
+"""Allowed column names for the `hasType` argument on the query `tags`."""
+enum TagsHasTypeColumn {
+  SLUG
+}
+
+"""
+Dynamic WHERE conditions for the `hasType` argument on the query `tags`.
+"""
+input TagsHasTypeWhereConditions {
+  """The column that is used for the condition."""
+  column: TagsHasTypeColumn
+
+  """The operator that is used for the condition."""
+  operator: SQLOperator = EQ
+
+  """The value that is used for the condition."""
+  value: Mixed
+
+  """A set of conditions that requires all conditions to match."""
+  AND: [TagsHasTypeWhereConditions!]
+
+  """A set of conditions that requires at least one condition to match."""
+  OR: [TagsHasTypeWhereConditions!]
+}
+
+"""Allowed column names for the `orderBy` argument on the query `tags`."""
+enum TagsOrderByColumn {
+  CREATED_AT
+  NAME
+  UPDATED_AT
+}
+
+"""Order by clause for the `orderBy` argument on the query `tags`."""
+input TagsOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: TagsOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+type Tax {
+  id: ID
+  name: String
+  rate: Float
+  is_global: Boolean
+  country: String
+  state: String
+  zip: String
+  city: String
+  priority: Int
+  on_shipping: Boolean
+}
+
+"""
+Allowed column names for the `orderBy` argument on the query `taxClasses`.
+"""
+enum TaxClassesOrderByColumn {
+  UPDATED_AT
+  CREATED_AT
+}
+
+"""Order by clause for the `orderBy` argument on the query `taxClasses`."""
+input TaxClassesOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: TaxClassesOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+input TaxInput {
+  name: String
+  rate: Float
+  is_global: Boolean
+  country: String
+  state: String
+  zip: String
+  city: String
+  priority: Int
+  on_shipping: Boolean
+}
+
+input TaxUpdateInput {
+  id: ID!
+  name: String
+  rate: Float
+  is_global: Boolean
+  country: String
+  state: String
+  zip: String
+  city: String
+  priority: Int
+  on_shipping: Boolean
+}
+
+"""
+Specify if you want to include or exclude trashed results from a query.
+"""
+enum Trashed {
+  """Only return trashed results."""
+  ONLY
+
+  """Return both trashed and non-trashed results."""
+  WITH
+
+  """Only return non-trashed results."""
+  WITHOUT
+}
+
+type Type {
+  id: ID
+  name: String
+  slug: String
+  image: Attachment
+  icon: String
+  created_at: DateTime
+  updated_at: DateTime
+}
+
+"""Allowed column names for the `orderBy` argument on the query `types`."""
+enum TypesOrderByColumn {
+  UPDATED_AT
+}
+
+"""Order by clause for the `orderBy` argument on the query `types`."""
+input TypesOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: TypesOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+input UpdateProductInput {
+  id: ID!
+  name: String
+  type_id: String!
+  vendor_id: ID!
+  price: Float
+  max_price: Float
+  min_price: Float
+  quantity: Int
+  product_type: ProductType
+  unit: String!
+  description: String
+  categories: SyncCategoryBelongsToMany
+  variations: SyncAttributeBelongsToMany
+  variation_options: UpsertVariationsHasMany
+  in_stock: Boolean
+  is_taxable: Boolean
+  sale_price: Float
+  sku: String
+  gallery: [AttachmentInput]
+  image: AttachmentInput
+  status: ProductStatus
+  height: String
+  length: String
+  width: String
+}
+
+scalar Upload
+
+input UpsertVariationsHasMany {
+  upsert: [VariationInput]
+  delete: [ID!]
+}
+
+type User {
+  id: ID
+  name: String
+  email: String
+  created_at: DateTime
+  updated_at: DateTime
+  profile: Profile
+  shop: Shop
+  is_active: Boolean
+  vendor_orders(id: ID): Int
+  products(id: ID): Int
+  address: [Address]
+  orders: [Order]
+}
+
+type UserAddress {
+  street_address: String
+  country: String
+  city: String
+  state: String
+  zip: String
+}
+
+input UserAddressInput {
+  street_address: String
+  country: String
+  city: String
+  state: String
+  zip: String
+}
+
+input UserAddressUpsertInput {
+  title: String!
+  default: Boolean
+  address: UserAddressInput!
+  type: AddressType!
+  id: ID
+}
+
+"""A paginated list of User items."""
+type UserPaginator {
+  """Pagination information about the list of items."""
+  paginatorInfo: PaginatorInfo!
+
+  """A list of User items."""
+  data: [User!]!
+}
+
+input UserProfileInput {
+  avatar: AttachmentInput
+  bio: String
+  socials: [SocialInput]
+  contact: String
+  id: ID
+}
+
+input UserUpdateInput {
+  id: ID!
+  name: String
+  profile: ProfileHasOne
+  address: AddressHasMany
+}
+
+"""Allowed column names for the `orderBy` argument on the query `users`."""
+enum UsersOrderByColumn {
+  UPDATED_AT
+  CREATED_AT
+  NAME
+}
+
+"""Order by clause for the `orderBy` argument on the query `users`."""
+input UsersOrderByOrderByClause {
+  """The column that is used for ordering."""
+  field: UsersOrderByColumn!
+
+  """The direction that is used for ordering."""
+  order: SortOrder!
+}
+
+type Variation {
+  id: ID
+  title: String
+  price: Float
+  sku: String
+  is_disable: Boolean
+  sale_price: Float
+  quantity: Int
+  options: [VariationOption]
+}
+
+input VariationInput {
+  id: ID
+  title: String
+  sku: String
+  is_disable: Boolean
+  sale_price: Float
+  price: Float
+  quantity: Int
+  options: [VariationOptionInput]
+}
+
+type VariationOption {
+  name: String
+  value: String
+}
+
+input VariationOptionInput {
+  name: String
+  value: String
+}
+
+type VariationProductPivot {
+  price: Float
+}
+
+type VerifiedCheckoutData {
+  total_tax: Float
+  shipping_charge: Float
+  unavailable_products: [ID]
+}
+
+type VerifyCouponResponse {
+  is_valid: Boolean!
+  coupon: Coupon
+}
+
+"""Dynamic WHERE conditions for queries."""
+input WhereConditions {
+  """The column that is used for the condition."""
+  column: String
+
+  """The operator that is used for the condition."""
+  operator: SQLOperator = EQ
+
+  """The value that is used for the condition."""
+  value: Mixed
+
+  """A set of conditions that requires all conditions to match."""
+  AND: [WhereConditions!]
+
+  """A set of conditions that requires at least one condition to match."""
+  OR: [WhereConditions!]
+}
+
+input changePasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}
+
+input createCategoryInput {
+  name: String!
+  type: ConnectTypeBelongsTo
+  parent: Int
+  details: String
+  image: AttachmentInput
+  icon: String
+}
+
+input createOrderInput {
+  customer_contact: String!
+  status: Int!
+  products: [ConnectProductOrderPivot!]!
+  amount: Float!
+  sales_tax: Float
+  total: Float!
+  paid_total: Float!
+  payment_id: String
+  payment_gateway: PaymentGatewayType!
+  coupon_id: Int
+  vendor_id: ID!
+  discount: Float
+  delivery_fee: Float
+  delivery_time: String
+  card: CardInput
+  billing_address: UserAddressInput
+  shipping_address: UserAddressInput
+}
+
+input createTagInput {
+  name: String!
+  type: ConnectTypeBelongsTo
+  details: String
+  image: AttachmentInput
+  icon: String
+}
+
+input forgetPasswordInput {
+  email: String!
+}
+
+type passwordChangeResponse {
+  message: String
+  success: Boolean
+}
+
+input resetPasswordInput {
+  token: String!
+  email: String!
+  password: String!
+}
+
+type totalYearSaleByMonth {
+  total: Float
+  month: String
+}
+
+input updateCategoryInput {
+  id: ID!
+  name: String
+  type: ConnectTypeBelongsTo
+  parent: Int
+  details: String
+  image: AttachmentInput
+  icon: String
+}
+
+input updateOrderInput {
+  id: ID!
+  status: ConnectOrderStatusBelongsTo!
+  products: SyncProductOrderBelongsToMany
+  coupon: ConnectCouponBelongsTo
+  vendor_id: ID!
+  delivery_time: String
+  billing_address: UserAddressInput
+  shipping_address: UserAddressInput
+}
+
+input updateTagInput {
+  id: ID!
+  name: String
+  type: ConnectTypeBelongsTo
+  details: String
+  image: AttachmentInput
+  icon: String
+}
+
+input verifyForgetPasswordTokenInput {
+  token: String!
+  email: String!
+}
+[39m

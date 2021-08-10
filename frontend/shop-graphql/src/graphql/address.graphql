@@ -1,0 +1,44 @@
+mutation CreateAddress($input: AddressInput!) {
+  createAddress(input: $input) {
+    id
+    title
+    type
+    default
+    address {
+      country
+      city
+      state
+      zip
+    }
+  }
+}
+mutation UpdateAddress($id: ID!, $input: AddressInput!) {
+  updateAddress(id: $id, input: $input) {
+    id
+    title
+    type
+    default
+    address {
+      country
+      city
+      state
+      zip
+      street_address
+    }
+  }
+}
+mutation DeleteAddress($id: ID!) {
+  deleteAddress(id: $id) {
+    id
+    title
+    type
+    default
+    address {
+      country
+      city
+      state
+      zip
+      street_address
+    }
+  }
+}

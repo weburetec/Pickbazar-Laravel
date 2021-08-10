@@ -1,0 +1,177 @@
+# import PaginatorParts from './paginator.fragment.graphql'
+
+query Categories(
+  $name: String
+  $orderBy: [QueryCategoriesOrderByOrderByClause!]
+  $hasType: QueryCategoriesHasTypeWhereHasConditions
+  $first: Int
+  $page: Int
+  $text: String
+) {
+  categories(
+    name: $name
+    orderBy: $orderBy
+    hasType: $hasType
+    first: $first
+    page: $page
+    text: $text
+  ) {
+    data {
+      id
+      type {
+        id
+        name
+        slug
+      }
+      icon
+      name
+      slug
+      details
+      parent {
+        id
+        name
+      }
+      children {
+        id
+        name
+        slug
+        details
+        image {
+          id
+          thumbnail
+          original
+        }
+        type {
+          id
+          name
+          slug
+        }
+        # icon
+      }
+      image {
+        id
+        thumbnail
+        original
+      }
+      #   products {
+      #     id
+      #     name
+      #   }
+    }
+    paginatorInfo {
+      ...PaginatorParts
+    }
+  }
+}
+
+query CategoriesAlongChildren(
+  $orderBy: [QueryCategoriesAlongChildrenOrderByOrderByClause!]
+  $hasType: QueryCategoriesAlongChildrenHasTypeWhereHasConditions
+) {
+  categoriesAlongChildren(orderBy: $orderBy, hasType: $hasType) {
+    id
+    type {
+      id
+      name
+      slug
+    }
+    icon
+    name
+    slug
+    details
+    parent {
+      id
+      name
+    }
+    children {
+      id
+      name
+      slug
+      details
+      image {
+        id
+        thumbnail
+        original
+      }
+      type {
+        id
+        name
+        slug
+      }
+      # icon
+    }
+    image {
+      id
+      thumbnail
+      original
+    }
+    # products {
+    #   id
+    #   name
+    # }
+  }
+}
+
+query Category($id: ID, $slug: String) {
+  category(id: $id, slug: $slug) {
+    id
+    icon
+    name
+    slug
+    details
+    parent {
+      id
+      name
+    }
+    image {
+      id
+      thumbnail
+      original
+    }
+    type {
+      id
+      name
+      slug
+    }
+  }
+}
+
+mutation CreateCategory($input: createCategoryInput) {
+  createCategory(input: $input) {
+    id
+    icon
+    name
+    slug
+    type {
+      id
+      name
+      slug
+    }
+  }
+}
+mutation UpdateCategory($input: updateCategoryInput) {
+  updateCategory(input: $input) {
+    id
+    icon
+    name
+    slug
+    type {
+      id
+      name
+      slug
+    }
+  }
+}
+mutation DeleteCategory($id: ID!) {
+  deleteCategory(id: $id) {
+    id
+    icon
+    name
+    slug
+    type {
+      id
+      name
+      slug
+    }
+  }
+}

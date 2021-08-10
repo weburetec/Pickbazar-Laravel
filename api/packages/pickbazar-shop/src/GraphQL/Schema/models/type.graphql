@@ -1,0 +1,33 @@
+extend type Query {
+    types(
+        text: String @where(operator: "like", key: "name")
+        orderBy: _ @orderBy(columns: ["updated_at", "created_at", "name"])
+    ): [Type!]! @all
+    type(id: ID @eq, slug: String @eq): Type @find
+}
+
+type Type {
+    id: ID
+    name: String
+    slug: String
+    image: Attachment
+    icon: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+input CreateTypeInput {
+    name: String!
+    image: AttachmentInput
+    icon: String
+}
+
+extend type Mutation {
+    deleteType(id: ID!): Type @delete @can(ability: "super_admin")
+    updateType(id: ID!, input: CreateTypeInput @spread): Type
+        @update
+        @can(ability: "super_admin")
+    createType(input: CreateTypeInput @spread): Type
+        @create
+        @can(ability: "super_admin")
+}

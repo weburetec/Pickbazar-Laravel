@@ -1,0 +1,8 @@
+query Types($text: String, $orderBy: [QueryTypesOrderByOrderByClause!]) {
+  types(text: $text, orderBy: $orderBy) {
+    id
+    name
+    slug
+    icon
+  }
+}

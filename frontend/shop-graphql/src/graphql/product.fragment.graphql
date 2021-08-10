@@ -1,0 +1,22 @@
+fragment ProductParts on Product {
+  id
+  name
+  slug
+  type {
+    id
+    name
+    slug
+  }
+  product_type
+  price
+  sale_price
+  min_price
+  max_price
+  quantity
+  unit
+  image {
+    id
+    thumbnail
+    original
+  }
+}

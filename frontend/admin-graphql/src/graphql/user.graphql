@@ -1,0 +1,32 @@
+mutation UpdateUser($input: UserUpdateInput) {
+  updateUser(input: $input) {
+    id
+    name
+    email
+    profile {
+      avatar {
+        id
+        thumbnail
+        original
+      }
+      contact
+      bio
+      socials {
+        type
+        link
+      }
+    }
+    address {
+      title
+      default
+      type
+      address {
+        street_address
+        country
+        city
+        state
+        zip
+      }
+    }
+  }
+}

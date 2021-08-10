@@ -1,0 +1,49 @@
+query Settings {
+  settings {
+    id
+    options {
+      siteTitle
+      siteSubtitle
+      currency
+      logo {
+        id
+        thumbnail
+        original
+      }
+      taxClass
+      shippingClass
+      seo {
+        metaTitle
+        metaDescription
+        ogTitle
+        ogDescription
+        ogImage {
+          id
+          thumbnail
+          original
+        }
+        twitterHandle
+        twitterCardType
+        metaTags
+        canonicalUrl
+      }
+      google {
+        isEnable
+        tagManagerId
+      }
+      facebook {
+        isEnable
+        appId
+        pageId
+      }
+    }
+  }
+  # taxClasses {
+  #   id
+  #   name
+  # }
+  # shippingClasses {
+  #   id
+  #   name
+  # }
+}

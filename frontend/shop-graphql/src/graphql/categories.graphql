@@ -1,0 +1,50 @@
+query Categories(
+  $orderBy: [QueryCategoriesOrderByOrderByClause!]
+  $hasType: QueryCategoriesHasTypeWhereHasConditions
+  $name: String
+  $first: Int = 2
+  $page: Int
+) {
+  categories(
+    hasType: $hasType
+    orderBy: $orderBy
+    name: $name
+    first: $first
+    page: $page
+  ) {
+    data {
+      id
+      name
+      slug
+      children {
+        id
+        name
+        slug
+        details
+        image {
+          id
+          original
+          thumbnail
+        }
+        icon
+        type {
+          id
+          name
+          slug
+        }
+      }
+      details
+      image {
+        id
+        original
+        thumbnail
+      }
+      icon
+      type {
+        id
+        name
+        slug
+      }
+    }
+  }
+}

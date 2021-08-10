@@ -1,0 +1,59 @@
+query OrderStatuses(
+  $first: Int
+  $page: Int
+  $text: String
+  $orderBy: [QueryOrderStatusesOrderByOrderByClause!]
+) {
+  orderStatuses(first: $first, page: $page, text: $text, orderBy: $orderBy) {
+    data {
+      id
+      name
+      color
+      serial
+    }
+    paginatorInfo {
+      currentPage
+      firstItem
+      hasMorePages
+      lastItem
+      perPage
+      total
+      lastPage
+      count
+    }
+  }
+}
+
+query OrderStatus($id: ID!) {
+  orderStatus(id: $id) {
+    id
+    name
+    color
+    serial
+  }
+}
+
+mutation CreateOrderStatus($input: OrderStatusInput) {
+  createOrderStatus(input: $input) {
+    id
+    name
+    color
+    serial
+  }
+}
+mutation UpdateOrderStatus($input: OrderStatusUpdateInput) {
+  updateOrderStatus(input: $input) {
+    id
+    name
+    color
+    serial
+  }
+}
+mutation DeleteOrderStatus($id: ID!) {
+  deleteOrderStatus(id: $id) {
+    id
+    name
+    color
+    serial
+  }
+}

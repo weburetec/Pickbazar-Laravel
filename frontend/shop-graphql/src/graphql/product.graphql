@@ -1,0 +1,52 @@
+# import ProductParts from './product.fragment.graphql'
+query Product($id: ID, $slug: String) {
+  product(id: $id, slug: $slug) {
+    ...ProductParts
+    shop_id
+    shop {
+      name
+      slug
+    }
+    description
+    categories {
+      id
+      name
+      slug
+      children {
+        id
+        name
+        slug
+      }
+    }
+    gallery {
+      id
+      thumbnail
+      original
+    }
+    variations {
+      id
+      value
+      meta
+      attribute {
+        id
+        name
+        slug
+      }
+    }
+    variation_options {
+      id
+      title
+      price
+      sale_price
+      quantity
+      is_disable
+      options {
+        name
+        value
+      }
+    }
+    related_products(slug: $slug) {
+      ...ProductParts
+    }
+  }
+}

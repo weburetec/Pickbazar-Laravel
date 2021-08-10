@@ -1,0 +1,118 @@
+mutation Login($email: String!, $password: String!) {
+  login(input: { email: $email, password: $password }) {
+    token
+    permissions
+  }
+}
+
+mutation SocialLogin($provider: String!, $accessToken: String!) {
+  socialLogin(input: { provider: $provider, access_token: $accessToken }) {
+    token
+    permissions
+  }
+}
+
+mutation Logout {
+  logout
+}
+
+mutation Register($name: String!, $email: String!, $password: String!) {
+  register(input: { name: $name, email: $email, password: $password }) {
+    token
+    permissions
+  }
+}
+
+mutation ChangePassword($input: changePasswordInput) {
+  changePassword(input: $input) {
+    message
+    success
+  }
+}
+
+mutation ForgetPassword($input: forgetPasswordInput) {
+  forgetPassword(input: $input) {
+    message
+    success
+  }
+}
+mutation VerifyForgetPasswordToken($input: verifyForgetPasswordTokenInput) {
+  verifyForgetPasswordToken(input: $input) {
+    message
+    success
+  }
+}
+mutation ResetPassword($input: resetPasswordInput) {
+  resetPassword(input: $input) {
+    message
+    success
+  }
+}
+
+mutation UpdateCustomer($input: UserUpdateInput) {
+  updateUser(input: $input) {
+    id
+    name
+    email
+    profile {
+      id
+      avatar {
+        id
+        thumbnail
+        original
+      }
+      bio
+      socials {
+        type
+        link
+      }
+      contact
+    }
+    address {
+      title
+      default
+      address {
+        country
+        city
+        state
+        zip
+      }
+      type
+    }
+  }
+}
+
+query Customer {
+  me {
+    id
+    name
+    email
+    profile {
+      id
+      avatar {
+        id
+        thumbnail
+        original
+      }
+      bio
+      socials {
+        type
+        link
+      }
+      contact
+    }
+    address {
+      id
+      title
+      default
+      type
+      address {
+        country
+        city
+        state
+        zip
+        street_address
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "pick-bazar",
+  "version": "2.1.0",
+  "private": true,
+  "author": "RedQ, Inc.",
+  "workspaces": [
+    "frontend/*"
+  ],
+  "scripts": {
+    "clean": "yarn workspaces run rimraf \"{.next,node_modules,__generated__,.cache,src/graphql/*.d.ts}\" && rimraf node_modules",
+    "gql-clean": "yarn workspaces run rimraf \"{__generated__,src/graphql/*.d.ts}\"",
+    "dev:shop-rest": "yarn workspace @pick-bazar/shop-rest dev",
+    "build:shop-rest": "yarn workspace @pick-bazar/shop-rest build",
+    "start:shop-rest": "yarn workspace @pick-bazar/shop-rest start",
+    "dev:admin-rest": "yarn workspace @pick-bazar/admin-rest dev",
+    "build:admin-rest": "yarn workspace @pick-bazar/admin-rest build",
+    "start:admin-rest": "yarn workspace @pick-bazar/admin-rest start",
+    "dev:shop-gql": "yarn workspace @pick-bazar/shop-graphql dev",
+    "build:shop-gql": "yarn workspace @pick-bazar/shop-graphql build",
+    "start:shop-gql": "yarn workspace @pick-bazar/shop-graphql start",
+    "dev:admin-gql": "yarn workspace @pick-bazar/admin-graphql dev",
+    "build:admin-gql": "yarn workspace @pick-bazar/admin-graphql build",
+    "start:admin-gql": "yarn workspace @pick-bazar/admin-graphql start",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^7.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,md,css}": [
+      "prettier --write"
+    ]
+  }
+}
